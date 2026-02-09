@@ -24,8 +24,9 @@ To run the Sea Surface Temperature (SST) example:
 
 1. **Setup the Environment:** Run the setup script to load data and initialize parameters.
    ```matlab
-   setup_sst
+   setup_sst.m
 2. **Run the Main Script:** Execute the main analysis script.
    ```matlab
-   script_sst
+   script_sst.m
+
 
