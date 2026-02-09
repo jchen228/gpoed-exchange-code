@@ -1,4 +1,5 @@
 # Sensor Placements in Gaussian Processes Using Column Subset Selection
+(updated: 2/9/2026)
 
 This repository contains the MATLAB implementation for optimal sensor placement in Gaussian Processes (GPs) using exchange-based algorithms and column subset selection. 
 
@@ -27,3 +28,4 @@ To run the Sea Surface Temperature (SST) example:
 2. **Run the Main Script:** Execute the main analysis script.
    ```matlab
    script_sst
+
