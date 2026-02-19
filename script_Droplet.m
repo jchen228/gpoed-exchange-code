@@ -5,7 +5,7 @@ rng("default")
 % global sig_n
 addpath(genpath('/Users/jchen228/Desktop/gitGPOED/H2Pack-Matlab-master'))
 
-% load droplet_setup.mat
+load droplet_setup.mat
 
 % plot settings
 lw = 3; % adjust linewidth
@@ -52,6 +52,19 @@ for k = j
     % legend('Original', 'GKS','Location','north')
     % % subtitle("fk opt error = " + num2str(fk_rp_err))
 
+     %% Partitioned GKS Algorithm
+    tic
+    p = 2*k;
+    pk_par = splitselect(x,p,k,@(x,x2) K_fun_offdiag(x,x2)); % output:placed sensors
+    x_par = x(pk_par,:);
+    K_par = K_funMat*x_par;
+    time_par = toc;
+
+    % compute log determinant
+    ld_par(i) = slogdet(K_par,sig_n);
+
+    fk_par = krr(x_par, y(pk_par), K, pk_par, sig_n);
+    fk_par_err(i) = norm(fk_par - y)/norm(y);
 
     %% NysGKS Algorithm
 
@@ -106,7 +119,7 @@ end
 figure()
 plot(j,ld_g(j),'--','LineWidth',lw)
 hold on
-plot(j,ld_gks,'LineWidth',lw)
+plot(j,ld_par,'LineWidth',lw)
 plot(j,ld_rp,'-.','LineWidth',lw)
 plot(j, ld_nys,':','LineWidth',lw)
 plot(j, ld_piv,'--o','LineWidth',lw)
@@ -141,7 +154,7 @@ histogram(ld_rnd)
 set(gca,'FontSize',36);
 hold on
 
-hxl2 = xline(ld_gks(i), "--" , LineWidth=lw);
+hxl2 = xline(ld_par(i), "--" , LineWidth=lw);
 fontsize(hxl2, 16, 'points')
 hxl2.Color = [ 0    0.4470    0.7410];
 hxl = xline(ld_rp(i), '-', LineWidth=lw);
@@ -187,7 +200,7 @@ hold on
 hxl2 = xline(ld_g(30), "--" , LineWidth=2);
 fontsize(hxl2, 16, 'points')
 hxl2.Color = [ 0    0.4470    0.7410];
-hxl = xline(ld_gks(i), '-', LineWidth=2);
+hxl = xline(ld_par(i), '-', LineWidth=2);
 fontsize(hxl, 16, 'points')
 hxl.Color = [0.8500    0.3250    0.0980];
 hxl3 = xline(ld_nys(i), ":" , LineWidth=2);
