@@ -1,6 +1,7 @@
 function [sel_ind, ld_g] = greedydopt6(K_fun,x,k,sig_n)
 % version 6, efficient greedy
 % update: K not fully formed
+% note: not the fast greedy MAP implementation
 
 % Kernel function is fed in directly 
 % K_fun: kernel matrix function
@@ -8,8 +9,8 @@ function [sel_ind, ld_g] = greedydopt6(K_fun,x,k,sig_n)
 % sig_n: signal variance
 
     n = length(x);
-    alpha = @(i) 1/(sig_n^2)*K_fun(x(i,:),x(i,:))+1;
-    A = @(i,j) 1/(sig_n^2)*K_fun(x(i,:),x(j,:)); 
+    alpha = @(i) 1/(sig_n^2)*K_fun(x(i,:),x(i,:))+1; % "on" diagonal elements
+    A = @(i,j) 1/(sig_n^2)*K_fun(x(i,:),x(j,:));  % off diagonal elements
 
     % Initialize variables
     sel_ind = zeros(1,k);
