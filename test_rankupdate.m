@@ -1,8 +1,5 @@
-% assumes K is permutes such that selection is the (1,1) block
-
-
 clear; clc;
-rng(0)
+% rng("default")
 
 % % toy example
 % n = 8; k = 4;
@@ -48,21 +45,34 @@ rng(0)
 % k = 30;
 
 load droplet_setup.mat
+
 n = N;
 k = 30;
 
-% initial gks selection
+%% test gks initial placement
 tic
 pk_gks = gks(K,k); % output: Kernel of placed sensors, placed sensors
 x_gks = x(pk_gks,:);
 K_gks = K(pk_gks,pk_gks);
 time_gks = toc;
 
-
 % compute log determinant
 ld_gks = slogdet(K_gks,sig_n)
 
-p = pk_gks;
+%% test against random placement
+pk_rnd = datasample(1:N,30,'Replace',false); % generate k random samples of values up to N without replacement
+x_rnd = x(pk_rnd,:);
+K_rnd = K_fun(x_rnd);
+ld_rnd = slogdet(K_rnd,sig_n)
+
+%% test against greedy placement
+
+[pk_g, ld_g] = greedydopt6(K_fun_offdiag,x,k,sig_n);
+ld_g(end)
+
+%% Swapping Step
+
+p = [20:300:6000 1:10]+1;
 % A = (1/(sig_n^2))*K_gks+eye(k); % covariance matrix of selected sensors
 % L = chol(A + 1e-9*eye(k), 'lower'); % Compute the Cholesky factor of the covariance matrix
 
@@ -98,14 +108,14 @@ for l = 1:k
         R_sub = cholupdate(L_sub', col_to_add, '+');
         L_fast(idx:end, idx:end) = R_sub';
     end
+
+
     
     %% --- 2. EXCHANGE SEEKING STEP ---
     % note: adds new sensor to "end" of block
     
     p_temp = p;
     p_temp(idx) = []; 
-    
-    % later: look into block linear solves
 
     % compute beta of unswapped selection
     rhs_orig = A(p_temp, p(idx));
@@ -117,7 +127,7 @@ for l = 1:k
     
     beta = [];
     for j = setdiff(1:n, p_temp)
-        rhs = K(p_temp, j); 
+        rhs = A(p_temp, j); 
         if size(rhs, 2) > 1; rhs = rhs'; end % ensures correct dimensions
         
         b = L_fast \ rhs;
@@ -133,14 +143,14 @@ for l = 1:k
         % update A and L
         L = [L_fast zeros(k-1,1); b' beta(i)];
 
-        disp("swap made in round "+l)
+        % disp("swap made in round "+l)
 
     else 
         disp("no swap made in round "+l)
     end
 
-    ld_swap = sum(log(diag(L)));
+    % ld_swap = sum(log(diag(L)));
     
 end
 
-ld_swap
+slogdet(K(p,p), sig_n)
