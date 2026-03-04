@@ -72,7 +72,7 @@ ld_g(end)
 
 %% Swapping Step
 
-p = [20:300:6000 1:10]+1;
+p = p = [1:15 5987:6001];
 % A = (1/(sig_n^2))*K_gks+eye(k); % covariance matrix of selected sensors
 % L = chol(A + 1e-9*eye(k), 'lower'); % Compute the Cholesky factor of the covariance matrix
 
@@ -97,17 +97,21 @@ for l = 1:k
     ld_test = sum(log(diag(L)));
         
         
-    col_to_add = L(idx+1:end, idx);
-    L_fast = L;
-    L_fast(idx, :) = []; % Remove row
-    L_fast(:, idx) = []; % Remove col
-    
-    if idx <= size(L_fast, 1)
-        L_sub = L_fast(idx:end, idx:end);
-        % Update the sub-block
-        R_sub = cholupdate(L_sub', col_to_add, '+');
-        L_fast(idx:end, idx:end) = R_sub';
-    end
+    col_to_add = L(2:end,1);
+    L_fast = L(2:end,2:end);
+    L_fast = (cholupdate(L_fast', col_to_add, '+'))';
+
+   % col_to_add = L(idx+1:end, idx);
+   % L_fast = L;
+   % L_fast(idx, :) = []; % Remove row
+   % L_fast(:, idx) = []; % Remove col
+   % 
+   % if idx <= size(L_fast, 1)
+   %     L_sub = L_fast(idx:end, idx:end);
+   %     % Update the sub-block
+   %     R_sub = cholupdate(L_sub', col_to_add, '+');
+   %     L_fast(idx:end, idx:end) = R_sub';
+   % end % could be used if swaps don't take the first element each time
 
 
     
