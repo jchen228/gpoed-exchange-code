@@ -19,31 +19,31 @@ clear; clc;
 % h = out_pde(1:20:(20*n),2);
 % t = out_pde(1:20:(20*n),3);
 
-% n = 6001;
-% N = n;
-% 
-% % x = out_pde(:,1);
-% % h = out_pde(:,2);
-% % t = out_pde(:,3);
-% 
-% ls = 0.5;
-% sig_f = 1; % signal variance
-% sig_n = 0.002*norm(h)/sqrt(n);
-% 
-% x_all = reshape(x, n, []);
-% x = x_all(:,1); % rewrites variable x to be the domain of selection
-% h_all = reshape(h, n, []);
-% t_all = reshape(t, n, []);
-% t = t_all(1,:); % rewrites variable t to be the time steps
-% 
-% y_all = (h_all + sig_n^2*randn(size(h_all)))';
-% y = h;
-% 
-% K_fun = @(x) gaussKern(x,sig_f,ls);
-% K_fun_offdiag = @(x,x2) gaussKern(x,sig_f,ls,x2);
-% 
-% K = K_fun(x);
-% k = 10;
+n = 6001;
+N = n;
+
+x = out_pde(:,1);
+h = out_pde(:,2);
+t = out_pde(:,3);
+
+ls = 0.5;
+sig_f = 1; % signal variance
+sig_n = 0.002*norm(h)/sqrt(n);
+
+x_all = reshape(x, n, []);
+x = x_all(:,1); % rewrites variable x to be the domain of selection
+h_all = reshape(h, n, []);
+t_all = reshape(t, n, []);
+t = t_all(1,:); % rewrites variable t to be the time steps
+
+y_all = (h_all + sig_n^2*randn(size(h_all)))';
+y = h;
+
+K_fun = @(x) gaussKern(x,sig_f,ls);
+K_fun_offdiag = @(x,x2) gaussKern(x,sig_f,ls,x2);
+
+K = K_fun(x);
+k = 10;
 
 load droplet_setup.mat
 
@@ -74,7 +74,7 @@ ld_g(end)
 %% Swapping Step
 
 % p = [1:15 5987:6001];
-p = pk_g;
+p = pk_gks;
 % p = p
 % A = (1/(sig_n^2))*K_gks+eye(k); % covariance matrix of selected sensors
 % L = chol(A + 1e-9*eye(k), 'lower'); % Compute the Cholesky factor of the covariance matrix
