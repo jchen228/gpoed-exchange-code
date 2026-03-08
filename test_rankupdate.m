@@ -12,42 +12,43 @@ clear; clc;
 % A = K(p,p);
 % L = chol(A + 1e-9*eye(A), 'lower'); % Recompute Cholesky factor
 
-% load out_pde.dat
-% % n = 30;
-% % 
-% % x = out_pde(1:20:(20*n),1);
-% % h = out_pde(1:20:(20*n),2);
-% % t = out_pde(1:20:(20*n),3);
-% 
+load out_pde.dat
+n = 30;
+
+x = out_pde(1:20:(20*n),1);
+h = out_pde(1:20:(20*n),2);
+t = out_pde(1:20:(20*n),3);
+
 % n = 6001;
+N = n;
 % 
 % x = out_pde(:,1);
 % h = out_pde(:,2);
 % t = out_pde(:,3);
+
+ls = 0.5;
+sig_f = 1; % signal variance
+sig_n = 0.002*norm(h)/sqrt(n);
+
+x_all = reshape(x, n, []);
+x = x_all(:,1); % rewrites variable x to be the domain of selection
+h_all = reshape(h, n, []);
+t_all = reshape(t, n, []);
+t = t_all(1,:); % rewrites variable t to be the time steps
+
+y_all = (h_all + sig_n^2*randn(size(h_all)))';
+y = h;
+
+K_fun = @(x) gaussKern(x,sig_f,ls);
+K_fun_offdiag = @(x,x2) gaussKern(x,sig_f,ls,x2);
+
+K = K_fun(x);
+k = 5;
+
+% load droplet_setup.mat
 % 
-% ls = 0.5;
-% sig_f = 1; % signal variance
-% sig_n = 0.002*norm(h)/sqrt(n);
-% 
-% x_all = reshape(x, n, []);
-% x = x_all(:,1); % rewrites variable x to be the domain of selection
-% h_all = reshape(h, n, []);
-% t_all = reshape(t, n, []);
-% t = t_all(1,:); % rewrites variable t to be the time steps
-% 
-% y_all = (h_all + sig_n^2*randn(size(h_all)))';
-% y = h;
-% 
-% K_fun = @(x) gaussKern(x,sig_f,ls);
-% K_fun_offdiag = @(x,x2) gaussKern(x,sig_f,ls,x2);
-% 
-% K = K_fun(x);
+% n = N;
 % k = 30;
-
-load droplet_setup.mat
-
-n = N;
-k = 30;
 
 %% test gks initial placement
 tic
@@ -72,7 +73,9 @@ ld_g(end)
 
 %% Swapping Step
 
-p = p = [1:15 5987:6001];
+% p = [1:15 5987:6001];
+p = [1 2 3 4 5]
+% p = p
 % A = (1/(sig_n^2))*K_gks+eye(k); % covariance matrix of selected sensors
 % L = chol(A + 1e-9*eye(k), 'lower'); % Compute the Cholesky factor of the covariance matrix
 
@@ -138,6 +141,9 @@ for l = 1:k
         beta(j) = sqrt(A(j,j)-b'*b);
     end    
 
+    beta
+    beta_orig
+
     if any(beta > beta_orig)
         [~,i] = max(beta); 
         b = L_fast \ A(p_temp, i);
@@ -151,10 +157,12 @@ for l = 1:k
 
     else 
         disp("no swap made in round "+l)
+        p = circshift(p, -1);
+        L = [L_fast zeros(k-1,1); b_orig' beta_orig];
     end
 
     % ld_swap = sum(log(diag(L)));
-    
+    p
 end
 
 slogdet(K(p,p), sig_n)
