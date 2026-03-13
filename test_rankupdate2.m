@@ -38,6 +38,7 @@ A = (1/(sig_n^2))*K+eye(n); % covariance matrix of selected sensors
 L = chol(A(p,p), 'lower'); % Compute the Cholesky factor of the covariance matrix
 
 
+swap_count = 0; % track how many swaps were made
 for l = 1:k
     %% --- FAST DOWNDATE (O(k^2) Method) ---
     % gets the cholesky factor of downdated matrix, L_fast ready to work sift through
@@ -98,7 +99,7 @@ for l = 1:k
 
     % beta
     % beta_orig
-    f = 1.025; 
+    f = 1+1e-4; 
     if any(beta > beta_orig*sqrt(f) + 1e-9)
         [~,i] = max(beta); 
         b = L_fast \ A(p_temp, i);
@@ -108,15 +109,15 @@ for l = 1:k
         % update A and L
         L = [L_fast zeros(k-1,1); b' beta(i)];
 
-        % disp("swap made in round "+l)
-
+        disp("swap made in round "+l)
+        swap_count = swap_count +1;
     else 
-        disp("no swap made in round "+l)
+        % disp("no swap made in round "+l)
         p = circshift(p, -1);
         L = [L_fast zeros(k-1,1); b_orig' beta_orig];
     end
-
     % ld_swap = sum(log(diag(L)));
 end
+disp("total swaps: "+swap_count)
 
 slogdet(K(p,p), sig_n)
