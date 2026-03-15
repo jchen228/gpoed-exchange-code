@@ -52,8 +52,6 @@ for l = 1:k
     % B(:,idx) = [];
     % 
     % L_B = chol(B,'lower'); % for testing
-
-    ld_test = sum(log(diag(L))); % why is this here???
         
         
     col_to_add = L(2:end,1);
