@@ -1,7 +1,6 @@
 function [p,ld_exchange] = exchange_sensors2(p,x,sig_n,sig_f,ls,f)
-% Function that takes initial placements and improves selection by a factor
-% f
-%   Detailed explanation goes here
+% Function that takes initial placements and improves selection by improving
+%  the determinant by a factor f
 arguments (Input)
     p
     x
@@ -14,6 +13,8 @@ arguments (Output)
     p
     ld_exchange
 end
+
+swap_count = 0;
 
 k = length(p);
 n = length(x);

@@ -1,6 +1,6 @@
 function [p,ld_exchange] = exchange_sensors(p,x,sig_n,sig_f,ls)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%% Function that takes initial placements and improves selection by a factor
+
 arguments (Input)
     p
     x
@@ -13,6 +13,8 @@ arguments (Output)
     p
     ld_exchange
 end
+
+swap_count = 0;
 
 k = length(p);
 n = length(x);
@@ -71,16 +73,17 @@ for l = 1:k
     best_sensor_ind = test_ind(i); % Map back to absolute sensor ID
 
     % Add a tiny tolerance (1e-9) to prevent swapping identical values
-    if max_beta > beta_orig + 1e-9 
+    if any(beta > beta_orig + 1e-9)
         % Grab the correct b vector using the relative index
         b_best = b_all(:, i); 
         
         p = [p_temp best_sensor_ind];
         L = [L_fast zeros(k-1,1); b_best' max_beta];
         % disp("swap made in round "+l)
+        swap_count = swap_count +1;
     else 
         % Push original sensor to the back of the queue
-        disp("no swap made in round "+l)
+        % disp("no swap made in round "+l)
         p = circshift(p, -1);
         L = [L_fast zeros(k-1,1); b_orig' beta_orig];
     end
