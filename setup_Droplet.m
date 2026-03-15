@@ -115,24 +115,53 @@ for k = 30
 end
 
 
-%% 10000 realizations of random
-rr = 10000;
+%% 10000 realizations of random and compute their exchanges
+% rr = 10000;
+% 
+% ld_rnd = zeros(1,rr);
+% fk_rnd = zeros(rr,N);
+% fk_rnd_err = zeros(1,rr);
+% 
+% exchange_ld_rnd = zeros(1,rr);
+% for i = 1:rr
+%     pk_rnd = datasample(1:N,30,'Replace',false); % generate k random samples of values up to N without replacement
+%     x_rnd = x(pk_rnd,:);
+%     K_rnd = K_fun(x_rnd);
+%     ld_rnd(i) = slogdet(K_rnd,sig_n);
+%     fk_rnd(i,:) = krr(x_rnd, y(pk_rnd), K, pk_rnd, sig_n);
+%     fk_rnd_err(i) = norm(fk_rnd(i,:)'-y)/norm(y);
+%     [~,exchange_ld_rnd(i)] = exchange_sensors(pk_rnd,x,sig_n,sig_f,ls);
+% end
+% 
+% rnd_stats = datastats(ld_rnd')
+% 
+% datastats(fk_rnd_err')
+% 
+% figure()
+% hist1 = histogram(ld_rnd);
+% % hist1.NumBins = 20;
+% % set(gca,'FontSize',48);
+% hold on
+% % hist2 = histogram(exchange_ld_rnd);
+% % hist2.NumBins = 7;
+% % hist2.FaceColor = "#DD5400";
+% xline(ld_g(end),'r',LineWidth=2)
+% xline(ld_gks,'b',LineWidth=2)
+% legend('random before', 'greedy before = 203.2840', 'gks before = 203.7627',Location='northwest')
+% hold off
+% 
+% [~,exchange_ld_g] = exchange_sensors(pk_g,x,sig_n,sig_f,ls)
+% [~,exchange_ld_gks] = exchange_sensors(pk_gks,x,sig_n,sig_f,ls)
+% 
+% figure()
+% hist2 = histogram(exchange_ld_rnd);
+% hist2.FaceColor = "#DD5400";
+% hold on
+% xline(exchange_ld_g,'r',LineWidth=2)
+% xline(exchange_ld_gks,'b',LineWidth=2)
+% legend('random after', 'greedy after = 203.6223' , 'gks after = 203.7684',Location='northwest')
+% hold off
 
-ld_rnd = zeros(1,rr);
-fk_rnd = zeros(rr,N);
-fk_rnd_err = zeros(1,rr);
-for i = 1:rr
-    pk_rnd = datasample(1:N,30,'Replace',false); % generate k random samples of values up to N without replacement
-    x_rnd = x(pk_rnd,:);
-    K_rnd = K_fun(x_rnd);
-    ld_rnd(i) = slogdet(K_rnd,sig_n);
-    fk_rnd(i,:) = krr(x_rnd, y(pk_rnd), K, pk_rnd, sig_n);
-    fk_rnd_err(i) = norm(fk_rnd(i,:)'-y)/norm(y);
-end
-
-rnd_stats = datastats(ld_rnd')
-
-datastats(fk_rnd_err')
 
 
 %%
