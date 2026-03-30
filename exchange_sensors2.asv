@@ -1,4 +1,4 @@
-function [p, ld_exchange, ld_all] = exchange_sensors2(p,x,sig_n,sig_f,ls,f)
+function [p,ld_exchange] = exchange_sensors2(p,x,sig_n,sig_f,ls,f)
 % Function that takes initial placements and improves selection by improving
 %  the determinant by a factor f
 arguments (Input)
@@ -17,12 +17,10 @@ arguments (Output)
 end
 
 swap_count = 0;
-j = 1;
+ld_all = [];
 
 k = length(p);
 n = length(x);
-
-ld_all = zeros(1,k);
 
 % functions for getting elements of K
 K_fun = @(x) gaussKern(x,sig_f,ls);
