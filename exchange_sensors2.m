@@ -1,4 +1,4 @@
-function [p, ld_exchange, ld_all] = exchange_sensors2(p,x,sig_n,sig_f,ls,f)
+function [p, ld_exchange, swap_count] = exchange_sensors2(p,x,sig_n,sig_f,ls,f)
 % Function that takes initial placements and improves selection by improving
 %  the determinant by a factor f
 arguments (Input)
@@ -13,7 +13,8 @@ end
 arguments (Output)
     p
     ld_exchange
-    ld_all % keep track of LD as swaps are made
+    swap_count
+    % ld_all % keep track of LD as swaps are made
 end
 
 swap_count = 0;
@@ -22,7 +23,7 @@ j = 1;
 k = length(p);
 n = length(x);
 
-ld_all = zeros(1,k);
+% ld_all = zeros(1,k);
 
 % functions for getting elements of K
 K_fun = @(x) gaussKern(x,sig_f,ls);
@@ -84,13 +85,13 @@ for l = 1:k
         L = [L_fast zeros(k-1,1); b_best' max_beta];
         disp("swap made in round "+l)
         swap_count = swap_count +1;
-        ld_all(j) = slogdet(K_fun(x(p,:)), sig_n);
+        % ld_all(j) = slogdet(K_fun(x(p,:)), sig_n);
     else 
         % Push original sensor to the back of the queue
         % disp("no swap made in round "+l)
         p = circshift(p, -1);
         L = [L_fast zeros(k-1,1); b_orig' beta_orig];
-        ld_all(j) = slogdet(K_fun(x(p,:)), sig_n);
+        % ld_all(j) = slogdet(K_fun(x(p,:)), sig_n);
     end
     j = j+1;
 end
