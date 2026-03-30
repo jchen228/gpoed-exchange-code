@@ -1,13 +1,14 @@
-function [p,ld_exchange, swap_count, ld_orig] = exchange_sensors3(p,x,sig_n, f, sig_f,ls)
+function [p,ld_exchange, swap_count, ld_orig] = exchange_sensors3(p,x,sig_n,sig_f,ls,f)
 % Function that takes initial placements and improves selection by improving
-%  the determinant by a factor f
+%  the determinant by a factor f and tests sensors further away from each
+%  other
 arguments (Input)
     p
     x
     sig_n
-    f
     sig_f (1,1) double = 1.0 % Default value if not provided
     ls (1,1) double = 1.0 % Default value if not provided
+    f (1,1) double = 1.0 % Default value if not provided
 end
 
 arguments (Output)
@@ -32,7 +33,7 @@ A = @(i,j) 1/(sig_n^2)*K_fun_offdiag(x(i,:),x(j,:));  % off diagonal elements
 A_p = (1/(sig_n^2))*K_fun(x(p,:))+eye(k);
 L = chol(A_p, 'lower'); % Compute the Cholesky factor of the covariance matrix
 
-ld_orig = slogdet(K_fun(x(p,:)), sig_n) % orig ld
+ld_orig = slogdet(K_fun(x(p,:)), sig_n); % orig ld
 
 for l = 1:k
     %% --- FAST DOWNDATE (O(k^2) Method) ---
@@ -93,7 +94,7 @@ for l = 1:k
         
         p = [p_temp best_sensor_ind];
         L = [L_fast zeros(k-1,1); b_best' max_beta];
-        disp("swap made in round "+l)
+        % disp("swap made in round "+l)
         swap_count = swap_count +1;
     else 
         % Push original sensor to the back of the queue
@@ -104,5 +105,5 @@ for l = 1:k
 
 end
 disp("total swaps: "+swap_count)
-ld_exchange = slogdet(K_fun(x(p,:)), sig_n)
+ld_exchange = slogdet(K_fun(x(p,:)), sig_n);
 end

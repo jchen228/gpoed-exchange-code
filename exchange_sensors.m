@@ -1,5 +1,5 @@
-function [p,ld_exchange] = exchange_sensors(p,x,sig_n,sig_f,ls)
-%% Function that takes initial placements and improves selection by a factor
+function [p,ld_exchange] = exchange_sensors(p,x,sig_n,sig_f,ls,f)
+%% Function that takes initial placements and improves selection via exhaustive search
 
 arguments (Input)
     p
@@ -7,6 +7,7 @@ arguments (Input)
     sig_n
     sig_f (1,1) double = 1.0 % Default value if not provided
     ls (1,1) double = 1.0 % Default value if not provided
+    f (1,1) double = 1.0 % Default value if not provided
 end
 
 arguments (Output)

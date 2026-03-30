@@ -83,7 +83,7 @@ for l = 1:k
         
         p = [p_temp best_sensor_ind];
         L = [L_fast zeros(k-1,1); b_best' max_beta];
-        disp("swap made in round "+l)
+        % disp("swap made in round "+l)
         swap_count = swap_count +1;
         % ld_all(j) = slogdet(K_fun(x(p,:)), sig_n);
     else 

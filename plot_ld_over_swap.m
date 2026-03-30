@@ -29,13 +29,13 @@ ld_rnd = slogdet(K_rnd,sig_n)
 ld_g(end)
 
 %%  count swap steps
-[sweep_gks,ld_all_gks] = count_sweeps(pk_gks,ld_gks,x,sig_n,sig_f,ls,f)
-[sweep_g,ld_all_g] = count_sweeps(pk_g,ld_g(end),x,sig_n,sig_f,ls,f)
-[sweep_rnd,ld_all_rnd] = count_sweeps(pk_rnd,ld_rnd,x,sig_n,sig_f,ls,f) % test against multiple random placements
+[sweep_gks,ld_all_gks] = count_sweeps(pk_gks,ld_gks,x,sig_n,sig_f,ls,f,@exchange_sensors2)
+[sweep_g,ld_all_g] = count_sweeps(pk_g,ld_g(end),x,sig_n,sig_f,ls,f,@exchange_sensors2);
+[sweep_rnd,ld_all_rnd] = count_sweeps(pk_rnd,ld_rnd,x,sig_n,sig_f,ls,f,@exchange_sensors2);
 
 %% Plot results
 lw = 1.5; %linewidth
-figure()
+figure(2)
 plot(1:sweep_gks, ld_all_gks, '-o',LineWidth=lw)
 hold on
 plot(1:sweep_g, ld_all_g, '-o',LineWidth=lw)

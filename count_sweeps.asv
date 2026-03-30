@@ -1,4 +1,4 @@
-function [sweep,initial_ld] = count_sweeps(initial_p,initial_ld,x,sig_n,sig_f,ls,f,exchange_function)
+function [sweep,initial_ld] = count_sweeps(initial_p,initial_ld,x,sig_n,sig_f,ls,f,exchange)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 arguments (Input)
@@ -9,7 +9,6 @@ arguments (Input)
     sig_f
     ls
     f
-    exchange_function
 end
 
 arguments (Output)
@@ -17,12 +16,12 @@ arguments (Output)
     initial_ld
 end
 
-[p, ld_exchange, swap_count] = exchange_function(initial_p,x,sig_n,sig_f,ls,f);
+[p, ld_exchange, swap_count] = exchange_sensors2(initial_p,x,sig_n,sig_f,ls,f);
 sweep = 1;
 initial_ld = [initial_ld, ld_exchange];
 sweep = sweep + 1;
 while swap_count > 0
-[p, ld_exchange, swap_count] = exchange_function(p,x,sig_n,sig_f,ls,f);
+[p, ld_exchange, swap_count] = exchange_sensors2(p,x,sig_n,sig_f,ls,f);
 sweep = sweep + 1; % Increment the round counter
 initial_ld = [initial_ld ld_exchange]; % Append log determinant for each round
 end
