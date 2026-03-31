@@ -104,6 +104,6 @@ for l = 1:k
     end
 
 end
-disp("total swaps: "+swap_count)
+% disp("total swaps: "+swap_count)
 ld_exchange = slogdet(K_fun(x(p,:)), sig_n);
 end

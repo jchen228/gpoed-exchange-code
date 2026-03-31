@@ -6,6 +6,7 @@ addpath '/Users/jchen228/Desktop/JUQ_supplement'
 
 n = N;
 k = 30;
+f = 1+1e-4; 
 
 %% test gks initial placement
 tic
@@ -29,7 +30,7 @@ ld_rnd = slogdet(K_rnd,sig_n)
 ld_g(end)
 
 %%  count swap steps
-[sweep_gks,ld_all_gks] = count_sweeps(pk_gks,ld_gks,x,sig_n,sig_f,ls,f,@exchange_sensors2)
+[sweep_gks,ld_all_gks] = count_sweeps(pk_gks,ld_gks,x,sig_n,sig_f,ls,f,@exchange_sensors2);
 [sweep_g,ld_all_g] = count_sweeps(pk_g,ld_g(end),x,sig_n,sig_f,ls,f,@exchange_sensors2);
 [sweep_rnd,ld_all_rnd] = count_sweeps(pk_rnd,ld_rnd,x,sig_n,sig_f,ls,f,@exchange_sensors2);
 
