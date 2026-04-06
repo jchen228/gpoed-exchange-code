@@ -37,6 +37,7 @@ k = 250;
 ls = 1550;
 sig_f = 8;
 sig_n = 0.002*norm(sst_sel)/sqrt(N);
+y = sst_sel_reshape_sea';
 
 K_fun = @(x) gaussKern(x,sig_f,ls);
 K_fun_offdiag = @(x,x2) gaussKern(x,sig_f,ls,x2);
@@ -80,6 +81,12 @@ fk_rnd_recon = reshape(fk_rnd_recon,size(sst_sel));
 
 
 plot_sst_map(fk_rnd_recon, pk_rnd)
+
+%% Efficient Greedy Selection
+tic
+[pk_g, ld_g] = greedydopt6(K_fun_offdiag,sea_points,k,sig_n);
+x_g = sea_points(pk_g,:);
+greedy_time = toc;
 
 %% Random Placements
 % 
