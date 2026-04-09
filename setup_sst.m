@@ -33,8 +33,13 @@ sea_points = x(sea_ind,:); % get positions of sea points
 
 k = 250;
 
-% hyperparameters
-ls = 1550;
+% hyperparameters for geo
+%ls = 1550;
+%sig_f = 8;
+%sig_n = 0.002*norm(sst_sel)/sqrt(N);
+
+% hyperparameters for se
+ls = 16;
 sig_f = 8;
 sig_n = 0.002*norm(sst_sel)/sqrt(N);
 y = sst_sel_reshape_sea';
