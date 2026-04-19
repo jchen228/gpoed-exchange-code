@@ -55,10 +55,7 @@ for l = 1:k
     
     % sample s = ceil{n/k ln(1/eps)} points
     s = ceil(n/k*log(1/eps));
-    test_ind = randsample(1:n, s, false);
-
-    % compute b vectors for randomly sampled points
-    test_ind = setdiff(test_ind, p_temp); % filter out already-selected sensors
+    test_ind = randsample(setdiff(1:n, p_temp), s, false);
     
     
     % compute all b vectors for this sweep to make more efficient
