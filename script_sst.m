@@ -14,31 +14,31 @@ p = k + 20;
 
 
 
-%% NysGKS Algorithm
-    
-    tic
-    [u,~] = Nys(Kf, k, p);
-    pk_nys = NysGKS(u,k);
-    x_nys = sea_points(pk_nys,:);
-    K_nys = rowcolkern(Kf,pk_nys,pk_nys);
-    time_nys = toc;
-
-    % compute log determinant
-    ld_nys = slogdet(K_nys,sig_n);
-
-    % load('sst_nys_selection.mat');
+% %% NysGKS Algorithm
 % 
-    fk_nys = krr(x_nys, y(pk_nys), Kf, pk_nys, sig_n);
-    fk_nys_err = norm(fk_nys - y)/norm(y);
-
+%     tic
+%     [u,~] = Nys(Kf, k, p);
+%     pk_nys = NysGKS(u,k);
+%     x_nys = sea_points(pk_nys,:);
+%     K_nys = rowcolkern(Kf,pk_nys,pk_nys);
+%     time_nys = toc;
 % 
-% combine both land mask and sea data
-fk_nys_recon = zeros(size(sst_sel_reshape));
-fk_nys_recon(sea_ind) = fk_nys;
-fk_nys_recon = reshape(fk_nys_recon,size(sst_sel));
-
-% Plot reconstruction
-plot_sst_map(fk_nys_recon, pk_nys)
+%     % compute log determinant
+%     ld_nys = slogdet(K_nys,sig_n);
+% 
+%     % load('sst_nys_selection.mat');
+% % 
+%     fk_nys = krr(x_nys, y(pk_nys), Kf, pk_nys, sig_n);
+%     fk_nys_err = norm(fk_nys - y)/norm(y);
+% 
+% % 
+% % combine both land mask and sea data
+% fk_nys_recon = zeros(size(sst_sel_reshape));
+% fk_nys_recon(sea_ind) = fk_nys;
+% fk_nys_recon = reshape(fk_nys_recon,size(sst_sel));
+% 
+% % Plot reconstruction
+% plot_sst_map(fk_nys_recon, pk_nys)
 
 %% RPCholesky Algorithm
     

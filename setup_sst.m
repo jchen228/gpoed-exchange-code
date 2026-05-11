@@ -40,7 +40,7 @@ k = 250;
 
 % hyperparameters for se
 ls = 16;
-sig_f = 8;
+sig_f = 0.11;
 sig_n = 0.002*norm(sst_sel)/sqrt(N);
 y = sst_sel_reshape_sea';
 
