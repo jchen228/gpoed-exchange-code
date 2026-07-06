@@ -1,4 +1,4 @@
-function [p, ld_exchange, swap_count, ld_orig] = exchange_sensors5 (p, x, sig_n, sig_f, ls, f, tol, trunc)
+function [p, ld_exchange, swap_count, ld_orig] = exchange_sensors5 (p, x, sig_n, sig_f, ls, f)
 % function takes initial placements p and performs a neighborhood search 
 % and performs a swap if the determinant improves by a factor of f
 arguments (Input)
@@ -8,8 +8,7 @@ arguments (Input)
     sig_f (1,1) double = 1.0 % Default value if not provided
     ls (1,1) double = 1.0 % Default value if not provided
     f (1,1) double = 1.0 % Default value if not provided
-    tol (1,1) double = 0.2 % Default value if not provided
-    trunc (1,1) double = 0 % Default value if not provided
+
 end
 
 arguments (Output)
@@ -56,28 +55,14 @@ for l = 1:k
     % get the p(1)th row of K
     row_p1 = K_fun_offdiag(x(p(1),:), x);
     
-    % find elements near sig_f^2 --- what is "near"? 
+    % find the largest k+1 elements in row_p1
     % do this before filtering out already-selected sensors to avoid
     % messing with the indices
-    test_ind = find(row_p1 > sig_f^2*(1-tol));    
+    lowerbound = qselect(row_p1, n-k+1);
+    test_ind = find(row_p1 > lowerbound);
+    %test_ind = find(row_p1 > sig_f^2*(1-tol));    
     
-    % if length(test_ind) is too long, sort to find the nearest sensors
-    % avoided sorting row_p1 in case n is very very large and sorting is
-    % somewhat expensive
-    switch trunc
-        case 0
-            test_ind = find(row_p1 > sig_f^2*(1-tol));    
-        case 1
-            if length(test_ind) > k
-                A_test_ind = A(p(1), test_ind);
-                B = [A_test_ind; test_ind];
-                [~,inx]=sort(B(1,:), "descend");
-                B = B(:,inx);
-                test_ind = B(2, 1:k);
-                disp("truncated test_ind in round " + l)
-            end
-    end
-
+    
     % compute b vectors 
     test_ind = setdiff(test_ind, p_temp); % filter out already-selected sensors
     rhs_all = A(p_temp,test_ind);
