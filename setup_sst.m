@@ -110,4 +110,13 @@ greedy_time = toc;
 %     i
 % end
 
+ls_m32 = [34.3863, 75.7375];
+sig_f_m32 = 10.7323;
+sig_n_m32 = 0.353786;
+
+ls_m52 = [24.4496, 56.882];
+sig_f_m52 = 10.1889;
+sig_n_m52 = 0.633816;
+
+
 % save('sst_setup_geo.mat')
